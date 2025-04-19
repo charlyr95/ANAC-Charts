@@ -1,3 +1,30 @@
+  // Set up viewing mode based on user preference
+  function rotatePdfPages() {
+    const viewer = document.getElementById("pdf-viewer");
+    if (!viewer) {
+      console.warn("No se encontró el elemento con id 'pdf-viewer'");
+      return;
+    }
+
+    console.log(viewer);
+    console.log(viewer.firstElementChild);
+    return;
+    const roleDocument = viewer.querySelector('[role="document"]');
+    if (!roleDocument) {
+      console.warn("No se encontró el elemento con role='document'");
+      return;
+    }
+  
+    currentRotation = (currentRotation + 90) % 360;
+  
+    const pages = roleDocument.children;
+  
+    for (const page of pages) {
+      page.style.transform = `rotate(${currentRotation}deg)`;
+      page.style.transformOrigin = 'center center';
+    }
+  }
+
 document.addEventListener("DOMContentLoaded", () => {
   // Elements
   const searchInput = document.getElementById("airport-search")
@@ -20,18 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPdfUrl = null
   let currentPdfTitle = null
   let viewingMode = "direct" // Default viewing mode
-
-  // Show loading indicator
-  function showLoading() {
-    loadingIndicator.classList.remove("hidden")
-    resultsList.innerHTML =
-      '<p class="text-blue-500"><i class="fas fa-spinner fa-spin mr-2"></i>Cargando datos de aeropuertos...</p>'
-  }
-
-  // Hide loading indicator
-  function hideLoading() {
-    loadingIndicator.classList.add("hidden")
-  }
+  let currentRotation = 0; // Default pdf rotation
 
   // Show PDF loading indicator
   function showPdfLoading() {
@@ -70,16 +86,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Hide CORS warning if successful
     } catch (error) {
-      console.log("Error fetching airport data:", error)
+      console.error("Error fetching airport data:", error)
       resultsList.innerHTML = `
       <p class="text-red-500">Error al cargar datos: ${error.message}</p>
       <p class="text-gray-500 text-sm mt-2">Intente usar el proxy CORS o cargar los datos de ejemplo.</p>
       `
-      
-      // Show CORS warning
-    } finally {
-      // hideLoading()
-    }
+    } 
   }
 
   // Improved parsing function with better airport code detection
@@ -109,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         fullUrl = `https://ais.anac.gov.ar/${url}`
       }
-      console.log("Chart URL:", fullUrl)
+      // console.log("Chart URL:", fullUrl)
 
       // Extract airport code - looking for patterns like SAXX in the title
       // Improved regex to better match airport codes
@@ -180,8 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
       })
     })
 
-    console.log("Parsed airport data:", airportsData)
-
     // Update the UI to show how many airports were found
     const airportCount = Object.keys(airportsData).length
     if (airportCount > 0) {
@@ -207,9 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // If no name found, use a generic name with the code
     return `Aeropuerto ${code}`
   }
-
-  // Load sample data as fallback
-  // function loadSampleData() 
 
   // Set active chart type
   function setActiveChartType(type) {
@@ -272,7 +279,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Display PDF in the viewer using different methods based on the viewing mode
   function displayPdf(title, url) {
-    console.log(`Displaying PDF: ${title} (${url}) using mode: ${viewingMode}`)
     showPdfLoading()
 
     // Store current PDF info
@@ -301,65 +307,14 @@ document.addEventListener("DOMContentLoaded", () => {
     displayGoogleViewer(pdfUrl)
   }
 
-
-  // // Cargar PDF usando fetch y mostrarlo como blob URL
-  // async function fetchAndDisplayPdf(url) {
-  //   try {
-
-  //     const response = await fetch(url, {
-  //       method: "GET",
-  //       headers: {
-  //         accept:
-  //           "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-  //         "accept-language": "en-US,en;q=0.9,es;q=0.8",
-  //         "cache-control": "max-age=0",
-  //         dnt: "1",
-  //         "sec-ch-ua": '"Google Chrome";v="135", "Not-A.Brand";v="8", "Chromium";v="135"',
-  //         "sec-ch-ua-mobile": "?0",
-  //         "sec-ch-ua-platform": '"Windows"',
-  //         "sec-fetch-dest": "document",
-  //         "sec-fetch-mode": "navigate",
-  //         "sec-fetch-site": "cross-site",
-  //         "upgrade-insecure-requests": "1",
-  //       },
-  //       referrerPolicy: "strict-origin-when-cross-origin",
-  //       mode: "cors",
-  //       credentials: "include",
-  //     })
-
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`)
-  //     }
-
-  //     // Convertir la respuesta a un blob
-  //     const pdfBlob = await response.blob()
-
-  //     // Crear una URL para el blob
-  //     const blobUrl = URL.createObjectURL(pdfBlob)
-
-  //     // Mostrar el PDF en el iframe
-  //     pdfViewer.src = blobUrl
-  //     pdfViewer.classList.remove("hidden")
-
-  //     hidePdfLoading()
-
-  //     // Limpiar la URL del blob cuando se descargue el iframe
-  //     pdfViewer.onload = () => {
-  //       console.log("PDF cargado desde blob URL")
-  //     }
-  //   } catch (error) {
-  //     console.error("Error al cargar PDF con fetch:", error)
-  //     // Intentar con el método de proxy como último recurso
-  //     // setActiveViewingMode("proxy")
-  //   }
-  // }
-
   // Display PDF using Google Docs Viewer
   function displayGoogleViewer(url) {
     const googleViewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`
 
+    
+
     pdfViewer.onload = () => {
-      console.log("PDF loaded successfully (Google Viewer)")
+      // console.log("PDF loaded successfully (Google Viewer)")
       hidePdfLoading()
     }
 
@@ -377,7 +332,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Set iframe source with Google Viewer
-    pdfViewer.src = googleViewerUrl
+    // pdfViewer.src = googleViewerUrl
+    pdfViewer.src = url;
     pdfViewer.classList.remove("hidden")
   }
 
