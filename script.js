@@ -335,10 +335,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Set iframe source with Google Viewer
-    // pdfViewer.src = googleViewerUrl
-    pdfViewer.src = url;
+    if (esDispositivoMovil()) {
+      // For mobile devices, use Google Viewer
+      pdfViewer.src = googleViewerUrl
+    } else {
+      // For desktop, use the direct URL
+      pdfViewer.src = url;
+    }
     pdfViewer.classList.remove("hidden")
   }
+
+  function esDispositivoMovil() {
+    return /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  }
+  
+  
 
   // Search for an airport
   function searchAirport() {
