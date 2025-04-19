@@ -82,7 +82,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const html = await response.text()
       parseAirportData(html)
-      resultsList.innerHTML = '<p class="text-green-500">Datos cargados correctamente. Busque un aeropuerto.</p>'
+      resultsList.innerHTML = `
+      <p class="text-green-500">Datos cargados correctamente. Busque un aeropuerto.</p>
+      <p class="text-red-500">No válido para navegación real. Utilizado en entornos de simulación únicamente.</p>
+      `
 
       // Hide CORS warning if successful
     } catch (error) {
@@ -266,9 +269,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     charts.forEach((chart) => {
       const chartItem = document.createElement("div")
-      chartItem.className = "p-2 rounded-md cursor-pointer"
+      chartItem.className = "border border-solid border-gray-600 p-2 rounded-md cursor-pointer"
       chartItem.innerHTML = `
-        <p class="text-blue-300">${chart.title}</p>
+        <p class="text-blue-400">${chart.title}</p>
       `
       chartItem.addEventListener("click", () => {
         displayPdf(chart.title, chart.url)
