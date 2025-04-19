@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartas Aeronáuticas Argentina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- PDF.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        *, body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #cccccc;
+            background-color: #1E1E1E;
+        }
+
+        .pdf-container {
+            height: calc(100vh - 2rem);
+        }
+        .sidebar {
+            height: calc(100vh - 2rem);
+            overflow-y: auto;
+        }
+        #loading-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        #pdf-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* background-color: rgba(255, 255, 255, 0.9); */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #808080;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        #pdf-canvas-container {
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        #pdf-viewer.google-viewer {
+            width: 100% !important;
+            height: 100% !important;
+            min-width: 100% !important;
+            min-height: 100% !important;
+        }
+
+        #chart-types button {
+            color: rgb(255, 255, 255);
+        }
+
+    </style>
+</head>
+<body class="">
+
+    <div class="container mx-auto p-4">
+        <div class="flex flex-col md:flex-row gap-4">
+            <!-- Sidebar -->
+            <div class="sidebar rounded-lg shadow-md p-4 w-full md:w-80 overflow-hidden">
+                <h1 class="text-2xl font-bold mb-4">Cartas Aeronáuticas</h1>
+                
+                <!-- Search Box -->
+                <div class="mb-6">
+                    <label for="airport-search" class="block text-sm font-medium text-gray-100 mb-1">Buscar Aeropuerto (código OACI)</label>
+                    <div class="relative">
+                        <input type="text" id="airport-search" 
+                            class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200"
+                            placeholder="Ej: SABE, SAME, SAZN...">
+                        <button id="search-btn" class="absolute right-2 top-2 text-gray-200 hover:text-blue-200">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Chart Type Tabs -->
+                <div class="mb-4">
+                    <h2 class="text-lg font-semibold text-gray-300 mb-2">Tipo de Carta</h2>
+                    <div class="flex flex-wrap gap-2" id="chart-types">
+                        <button class="chart-type-btn px-3 py-1 bg-zinc-600 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="STAR">STAR</button>
+                        <button class="chart-type-btn px-3 py-1 bg-zinc-600 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="APP">APP</button>
+                        <button class="chart-type-btn px-3 py-1 bg-zinc-600 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="TAXI">TAXI</button>
+                        <button class="chart-type-btn px-3 py-1 bg-zinc-600 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="SID">SID</button>
+                        <button class="chart-type-btn px-3 py-1 bg-zinc-600 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="REF">REF</button>
+                    </div>
+                </div>
+                <div class="">
+                    <!-- Results List -->
+                    <div class="mt-4">
+                        <h2 class="text-lg font-semibold text-gray-400 mb-2">Resultados</h2>
+                        <div id="results-list" class="space-y-2">
+                            <p class="text-gray-500 text-sm italic">Busque un aeropuerto para ver las cartas disponibles.</p>
+                        </div>
+                    </div>
+    
+                    <!-- External Links -->
+                    <div class="mt-4 border-t pt-4">
+                        <div id="external-links" class="hidden">
+                            <h3 class="text-sm font-semibold text-gray-300 mb-2">Enlaces Externos:</h3>
+                            <div class="flex flex-col gap-2">
+                                <a id="open-new-tab" href="#" target="_blank" class="text-blue-400 hover:underline text-sm flex items-center">
+                                    <i class="fas fa-external-link-alt mr-1"></i> Abrir en Nueva Pestaña
+                                </a>
+                                <a id="download-pdf" href="#" download class="text-blue-400 hover:underline text-sm flex items-center">
+                                    <i class="fas fa-download mr-1"></i> Descargar PDF
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content - PDF Viewer -->
+            <div class="rounded-lg shadow-md p-4 w-full">
+                <div id="pdf-container" class="pdf-container flex items-center justify-center rounded-lg relative">
+                    <!-- PDF Loading Indicator -->
+                    <div id="pdf-loading" class="hidden">
+                        <div class="flex items-center">
+                            <div class="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-blue-400 mr-3"></div>
+                            <span>Cargando PDF...</span>
+                        </div>
+                    </div>
+
+                    <!-- No PDF Message -->
+                    <div id="no-pdf-message" class="text-center p-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
+                        <i class="fas fa-file-pdf text-gray-400 text-6xl mb-4"></i>
+                        <p class="text-gray-500">Seleccione una carta para visualizarla</p>
+                    </div>
+
+                    <!-- PDF.js Canvas Container -->
+                    <div id="pdf-canvas-container" class="hidden"></div>
+                    
+                    <!-- PDF Iframe -->
+                    <iframe 
+                        id="pdf-viewer" 
+                        class="w-full h-full hidden" 
+                        style="min-width: 100%; min-height: 100%; border: none;"
+                        frameborder="0"
+                        allowfullscreen
+                        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation allow-downloads"
+                    ></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
