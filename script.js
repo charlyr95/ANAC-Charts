@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const pdfViewer = document.getElementById("pdf-viewer")
   const noPdfMessage = document.getElementById("no-pdf-message")
   const pdfLoading = document.getElementById("pdf-loading")
-  const pdfCanvasContainer = document.getElementById("pdf-canvas-container")
   const loadingIndicator = document.getElementById("loading-indicator")
   const externalLinks = document.getElementById("external-links")
   const openNewTab = document.getElementById("open-new-tab")
@@ -298,8 +297,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Reset all viewers
     pdfViewer.classList.add("hidden")
-    pdfCanvasContainer.classList.add("hidden")
-    pdfCanvasContainer.innerHTML = ""
 
     // Format URL if needed
     let pdfUrl = url

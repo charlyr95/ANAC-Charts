@@ -15,113 +15,202 @@
 
         .pdf-container {
             height: 100%;
+            min-height: 50vh; /* Ensure minimum height on mobile */
         }
+        
         .sidebar {
-            /* height: calc(100vh - 2rem); */
             overflow-y: auto;
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
+        
+        /* Sidebar toggle for mobile */
+        @media (max-width: 1023px) {
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 50;
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            
+            body.sidebar-open {
+                overflow: hidden;
+            }
+        }
+        
         #loading-indicator {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(30, 30, 30, 0.8);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
+        
         #pdf-loading {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            /* background-color: rgba(255, 255, 255, 0.9); */
             padding: 1rem;
             border-radius: 0.5rem;
             border: 1px solid #808080;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             z-index: 10;
         }
-        #pdf-canvas-container {
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-        }
-        #pdf-viewer.google-viewer {
-            width: 100% !important;
-            height: 100% !important;
-            min-width: 100% !important;
-            min-height: 100% !important;
-        }
 
-        #chart-types button {
-            color: rgb(255, 255, 255);
+        #chart-types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
         }
         
-        #results-list .border, #results-list .border p{
+        #chart-types button {
+            color: rgb(255, 255, 255);
+            flex-grow: 1;
+            min-width: fit-content;
+            text-align: center;
+        }
+        
+        #results-list .border, #results-list .border p {
             transition: all 0.1s ease-in;
         }
 
-        #results-list .border:hover, #results-list .border:hover p{
+        #results-list .border:hover, #results-list .border:hover p {
             color: #98c7ff;
             border-color: #606060;
             background-color: rgb(42, 42, 42);
         } 
         
-        #results-list .border:hover{
+        #results-list .border:hover {
             box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4);
         }
 
+        /* Toggle button */
+        .sidebar-toggle {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 40;
+            background-color: #2d2d2d;
+            border: 1px solid #606060;
+            align-items: center;
+            text-align: center;
+            justify-content: center;
+            border-radius: 10px;
+            display: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease;
+            width: 40px;
+            height: 40px;
+        }
+        
+        .sidebar-toggle, .sidebar-toggle i {
+            background-color: #2d2d2d;
+        }
+
+        .sidebar-toggle, .sidebar-toggle i {
+            opacity: 70%;
+        }
+
+        .sidebar-toggle:hover, .sidebar-toggle:hover i {
+            background-color: #3d3d3d;
+        }
+        
+        @media (max-width: 1023px) {
+            .sidebar-toggle {
+                display: flex;
+            }
+        }
+
+        /* Fix for iframe on mobile */
+        #pdf-viewer {
+            width: 1px;
+            min-width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Close button for sidebar */
+        .close-sidebar {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: none;
+        }
+        
+        @media (max-width: 1023px) {
+            .close-sidebar {
+                display: block;
+            }
+        }
     </style>
 </head>
-<body class="">
-
-    <div class="container mx-auto p-0 m-0">
-        <div class="flex flex-col md:flex-row gap-4 overflow-hidden md:h-dvh h-fit">
-            <!-- Sidebar -->
-            <div class="sidebar rounded-lg shadow-md p-4 w-full md:w-80 overflow-hidden border-2 border-solid border-gray-500 my-5 h-100">
-                <h1 class="text-2xl font-bold mb-4">Cartas Aeronáuticas</h1>
-                
-                <!-- Search Box -->
-                <div class="mb-6">
-                    <label for="airport-search" class="block text-sm font-medium text-gray-100 mb-1">Buscar Aeropuerto (código OACI)</label>
-                    <div class="relative">
-                        <input type="text" id="airport-search" 
-                            class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200"
-                            placeholder="Ej: SABE, SAME, SAZN...">
-                        <button id="search-btn" class="absolute right-2 top-2 text-gray-200 hover:text-blue-200">
-                            <i class="fas fa-search"></i>
-                        </button>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Sidebar Toggle Button -->
+        <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Sidebar">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+        
+        <div class="lg:px-2 p-0 m-0 w-100">
+            <div class="flex flex-col lg:flex-row gap-4 h-full">
+                <!-- Sidebar -->
+                <div id="sidebar" class="sidebar lg:shadow-md p-5 w-full lg:w-80 lg:min-w-80 overflow-y-auto border-none lg:border-solid border border-gray-700 rounded-lg my-0 lg:my-2">
+                    <!-- Close Button (Mobile Only) -->
+                    <button id="close-sidebar" class="close-sidebar text-gray-400 hover:text-gray-200" aria-label="Close Sidebar">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                    
+                    <h1 class="text-2xl font-bold mb-4">Cartas Aeronáuticas</h1>
+                    
+                    <!-- Search Box -->
+                    <div class="mb-6">
+                        <label for="airport-search" class="block text-sm font-medium text-gray-100 mb-1">Buscar Aeropuerto (código OACI)</label>
+                        <div class="relative">
+                            <input type="text" id="airport-search" 
+                                class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 bg-zinc-800 border-zinc-600"
+                                placeholder="Ej: SABE, SAME, SAZN...">
+                            <button id="search-btn" class="absolute right-2 top-2 text-gray-200 hover:text-blue-200">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                
-                <!-- Chart Type Tabs -->
-                <div class="mb-4">
-                    <h2 class="text-lg font-semibold text-gray-300 mb-2">Tipo de Carta</h2>
-                    <div class="flex flex-wrap gap-2" id="chart-types">
-                        <button class="chart-type-btn px-3 py-1 bg-zinc-600 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="STAR">STAR</button>
-                        <button class="chart-type-btn px-3 py-1 bg-zinc-600 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="APP">APP</button>
-                        <button class="chart-type-btn px-3 py-1 bg-zinc-600 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="TAXI">TAXI</button>
-                        <button class="chart-type-btn px-3 py-1 bg-zinc-600 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="SID">SID</button>
-                        <button class="chart-type-btn px-3 py-1 bg-zinc-600 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="REF">REF</button>
+                    
+                    <!-- Chart Type Tabs -->
+                    <div class="mb-4">
+                        <h2 class="text-lg font-semibold text-gray-300 mb-2">Tipo de Carta</h2>
+                        <div id="chart-types" class="grid grid-cols-3 sm:flex sm:flex-wrap gap-2">
+                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="STAR">STAR</button>
+                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="APP">APP</button>
+                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="TAXI">TAXI</button>
+                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="SID">SID</button>
+                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="REF">REF</button>
+                        </div>
                     </div>
-                </div>
-                <div class="">
+                    
                     <!-- Results List -->
                     <div class="mt-4">
                         <h2 class="text-lg font-semibold text-gray-400 mb-2">Resultados</h2>
-                        <div id="results-list" class="space-y-2">
+                        <div id="results-list" class="space-y-2 max-h-[30vh] lg:max-h-[40vh] overflow-y-auto pr-1">
                             <p class="text-gray-500 text-sm italic">Busque un aeropuerto para ver las cartas disponibles.</p>
                         </div>
                     </div>
-    
+        
                     <!-- External Links -->
-                    <div class="mt-4 border-t pt-4">
+                    <div class="mt-4 border-t border-gray-700 pt-4">
                         <div id="external-links" class="hidden">
                             <h3 class="text-sm font-semibold text-gray-300 mb-2">Enlaces Externos:</h3>
                             <div class="flex flex-col gap-2">
@@ -135,40 +224,76 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Main Content - PDF Viewer -->
-            <div class="rounded-lg shadow-md p-4 w-full border-2 border-solid border-gray-500  my-5 md:h-100">
-                <div id="pdf-container" class="pdf-container flex items-center justify-center rounded-lg relative">
-                    <!-- PDF Loading Indicator -->
-                    <div id="pdf-loading" class="hidden">
-                        <div class="flex items-center">
-                            <div class="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-blue-400 mr-3"></div>
-                            <span>Cargando PDF...</span>
+                
+                <!-- Main Content - PDF Viewer -->
+                <div class="lg:shadow-md w-full border-none lg:border-solid border border-gray-700 rounded-lg rounded-lg-lg my-0 lg:my-2 flex-grow">
+                    <div id="pdf-container" class="pdf-container flex items-center justify-center rounded-lg rounded-lg-lg relative h-[calc(100dvh-2rem)]">
+                        <!-- PDF Loading Indicator -->
+                        <div id="pdf-loading" class="hidden">
+                            <div class="flex items-center">
+                                <div class="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-blue-400 mr-3"></div>
+                                <span>Cargando PDF...</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- No PDF Message -->
-                    <div id="no-pdf-message" class="text-center p-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 ">
-                        <i class="fas fa-file-pdf text-gray-400 text-6xl mb-4"></i>
-                        <p class="text-gray-500">Seleccione una carta para visualizarla</p>
+                        <!-- No PDF Message -->
+                        <div id="no-pdf-message" class="text-center p-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                            <i class="fas fa-file-pdf text-gray-400 text-6xl mb-4"></i>
+                            <p class="text-gray-500">Seleccione una carta para visualizarla</p>
+                        </div>
+                        
+                        <!-- PDF Iframe -->
+                        <iframe 
+                            id="pdf-viewer" 
+                            class="w-full h-full hidden rounded-none rounded-lg-lg" 
+                            src=""
+                            title="PDF Viewer"
+                            allowfullscreen></iframe>
                     </div>
-
-                    <!-- PDF.js Canvas Container -->
-                    <div id="pdf-canvas-container" class="hidden"></div>
-                    
-                    <!-- PDF Iframe -->
-                    <iframe 
-                        id="pdf-viewer" 
-                        class="w-full h-full hidden" 
-                        style="min-width: 100%; min-height: 100%; border: none;"
-                        src=""
-                    ></iframe>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
+    
+    <!-- Add this script for sidebar toggle functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const closeSidebar = document.getElementById('close-sidebar');
+            const body = document.body;
+            
+            // Function to toggle sidebar
+            function toggleSidebar() {
+                sidebar.classList.toggle('open');
+                body.classList.toggle('sidebar-open');
+            }
+            
+            // Open sidebar when toggle button is clicked
+            sidebarToggle.addEventListener('click', toggleSidebar);
+            
+            // Close sidebar when close button is clicked
+            closeSidebar.addEventListener('click', toggleSidebar);
+            
+            // Close sidebar when clicking on a chart result (on mobile)
+            const resultsList = document.getElementById('results-list');
+            resultsList.addEventListener('click', function(e) {
+                if (window.innerWidth < 1024) {
+                    sidebar.classList.remove('open');
+                    body.classList.remove('sidebar-open');
+                }
+            });
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 1024) {
+                    sidebar.classList.remove('open');
+                    body.classList.remove('sidebar-open');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
