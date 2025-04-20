@@ -6,11 +6,19 @@
     
     <!-- Metas -->
     <title>Cartas Aeronáuticas Argentina</title>
-    <meta name="description" content="Visualiza todas las cartas aeronáuticas publicadas por la ANAC en un solo lugar..." />
+    <meta name="description" content="Visualiza todas las cartas aeronáuticas publicadas por la ANAC en un solo lugar. Búsqueda por código OACI, filtrado por tipo de carta y visualización en PDF." />
     <meta name="keywords" content="aip, anac, cartas, charts, Argentina, vfr, ifr, simulador, flight, simulator, msfs, msfs2020, msfs2024, ad, aeropuertos, informacion, aeropuerto, pdf, ils, rnp, taxi, rwy" />
     <meta name="robots" content="INDEX,FOLLOW">
     <meta name="google-site-verification" content="tLeQjC870n-uZyD0-xwPEK360OZ_sN611OMVZ4VFujk" />
+    <meta name="author" content="Carlos R.">
     
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Cartas Aeronáuticas Argentina | Visualizador de Cartas ANAC">
+    <meta property="og:description" content="Visualiza todas las cartas aeronáuticas publicadas por la ANAC en un solo lugar. Búsqueda por código OACI, filtrado por tipo de carta y visualización en PDF.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://anac-cartas.pages.dev">
+    <meta property="og:image" content="./assets/favicon/favicon-64x64.png">
+
     <!-- Favicons --> 
     <link rel="shortcut icon" href="./assets/favicon/favicon-64x64.png" sizes="64x64" type="image/x-icon">
     <link rel="shortcut icon" href="./assets/favicon/favicon-32x32.png" sizes="32x32" type="image/x-icon">
@@ -23,17 +31,33 @@
     <meta name="theme-color" content="#1E1E1E">
     
     <!-- Styles / Scripts  -->
-    <!-- <script src="https://cdn.tailwindcss.com/3.4.16"></script> -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> -->
     <script src="./js/tailwind-3-4-16.js"></script>
     <link rel="stylesheet" href="./css/font-awesome-all.min.css">
     <link rel="stylesheet" href="./css/style.css">
+
+    <!-- Structured Data for SEO -->
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Cartas Aeronáuticas Argentina",
+          "description": "Visualizador de cartas aeronáuticas publicadas por la ANAC",
+          "applicationCategory": "Aviación",
+          "operatingSystem": "Web",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        }
+        </script>
 </head>
 <body>
     <div class="min-h-screen flex flex-col">
         <!-- Sidebar Toggle Button -->
-        <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle Sidebar">
+        <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Alternar menú lateral">
             <i class="fas fa-bars text-xl"></i>
+            <span class="sr-only">Abrir menú lateral</span>
         </button>
         
         <div class="lg:px-2 p-0 m-0 w-100">
@@ -54,7 +78,7 @@
                             <input type="text" id="airport-search" 
                                 class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-200 bg-zinc-800 border-zinc-600"
                                 placeholder="Ej: SABE, SAME, SAZN...">
-                            <button id="search-btn" class="absolute right-2 top-2 text-gray-200 hover:text-blue-200">
+                            <button id="search-btn" class="absolute right-2 top-2 text-gray-200 hover:text-blue-200" aria-label="Buscar aeropuerto"></button>>
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
@@ -64,11 +88,11 @@
                     <div class="mb-4">
                         <h2 class="text-lg font-semibold text-gray-300 mb-2">Tipo de Carta</h2>
                         <div id="chart-types" class="grid grid-cols-3 sm:flex sm:flex-wrap gap-2">
-                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="STAR">STAR</button>
-                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="APP">APP</button>
-                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="TAXI">TAXI</button>
-                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="SID">SID</button>
-                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" data-type="REF">REF</button>
+                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" aria-label="Mostrar carta STAR" data-type="STAR">STAR</button>   
+                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" aria-label="Mostrar carta APP" data-type="APP">APP</button>      
+                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" aria-label="Mostrar carta TAXI" data-type="TAXI">TAXI</button>   
+                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" aria-label="Mostrar carta SID" data-type="SID">SID</button>      
+                            <button class="chart-type-btn px-3 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-md text-sm font-medium" aria-label="Mostrar carta REF" data-type="REF">REF</button>      
                         </div>
                     </div>
                     
