@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- Página principal -->
+  <url>
+    <loc>https://anac-cartas.pages.dev/</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Páginas de aeropuertos principales (ejemplos) -->
+  <url>
+    <loc>https://anac-cartas.pages.dev/aeropuerto/SABE</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://anac-cartas.pages.dev/aeropuerto/SAEZ</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://anac-cartas.pages.dev/aeropuerto/SACO</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://anac-cartas.pages.dev/aeropuerto/SAME</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://anac-cartas.pages.dev/aeropuerto/SAZM</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Páginas de tipos de cartas (ejemplos) -->
+  <url>
+    <loc>https://anac-cartas.pages.dev/tipo/STAR</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://anac-cartas.pages.dev/tipo/APP</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://anac-cartas.pages.dev/tipo/TAXI</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://anac-cartas.pages.dev/tipo/SID</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://anac-cartas.pages.dev/tipo/REF</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Páginas informativas (ejemplos) -->
+  <url>
+    <loc>https://anac-cartas.pages.dev/acerca-de</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://anac-cartas.pages.dev/contacto</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://anac-cartas.pages.dev/ayuda</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://anac-cartas.pages.dev/terminos</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://anac-cartas.pages.dev/privacidad</loc>
+    <lastmod>2025-04-20T12:00:00+00:00</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+</urlset>

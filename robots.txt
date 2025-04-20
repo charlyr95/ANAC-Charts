@@ -1,0 +1,18 @@
+# robots.txt para Cartas Aeronáuticas Argentina
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+
+# Permitir acceso a archivos estáticos
+Allow: /assets/
+Allow: /css/
+Allow: /js/
+Allow: /images/
+
+# Tiempo de espera entre solicitudes
+Crawl-delay: 10
+
+# Ubicación del sitemap
+Sitemap: https://anac-cartas.pages.dev/sitemap.xml
