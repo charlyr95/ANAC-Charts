@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     
     <!-- Metas -->
     <title>Cartas Aeronáuticas Argentina</title>
@@ -13,7 +10,7 @@
     <meta name="keywords" content="aip, anac, cartas, charts, Argentina, vfr, ifr, simulador, flight, simulator, msfs, msfs2020, msfs2024, ad, aeropuertos, informacion, aeropuerto, pdf, ils, rnp, taxi, rwy" />
     <meta name="robots" content="INDEX,FOLLOW">
     <meta name="google-site-verification" content="tLeQjC870n-uZyD0-xwPEK360OZ_sN611OMVZ4VFujk" />
-
+    
     <!-- Favicons --> 
     <link rel="shortcut icon" href="./assets/favicon/favicon-64x64.png" sizes="64x64" type="image/x-icon">
     <link rel="shortcut icon" href="./assets/favicon/favicon-32x32.png" sizes="32x32" type="image/x-icon">
@@ -24,158 +21,13 @@
     <link rel="icon" type="image/x-icon" sizes="16x16" href="./assets/favicon/favicon-16x16.png" >
     <link rel="icon" type="image/x-icon" href="./assets/favicon/favicon-32x32.png" >
     <meta name="theme-color" content="#1E1E1E">
-
-    <style>
-        *, body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #cccccc;
-            background-color: #1E1E1E;
-        }
-
-        .pdf-container {
-            height: 100%;
-            min-height: 50vh; /* Ensure minimum height on mobile */
-        }
-        
-        .sidebar {
-            overflow-y: auto;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-        
-        /* Sidebar toggle for mobile */
-        @media (max-width: 1023px) {
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                z-index: 50;
-                transform: translateX(-100%);
-                opacity: 0;
-            }
-            
-            .sidebar.open {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            
-            body.sidebar-open {
-                overflow: hidden;
-            }
-        }
-        
-        #loading-indicator {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(30, 30, 30, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-        
-        #pdf-loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid #808080;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 10;
-        }
-
-        #chart-types {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        
-        #chart-types button {
-            color: rgb(255, 255, 255);
-            flex-grow: 1;
-            min-width: fit-content;
-            text-align: center;
-        }
-        
-        #results-list .border, #results-list .border p {
-            transition: all 0.1s ease-in;
-        }
-
-        #results-list .border:hover, #results-list .border:hover p {
-            color: #98c7ff;
-            border-color: #606060;
-            background-color: rgb(42, 42, 42);
-        } 
-        
-        #results-list .border:hover {
-            box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4);
-        }
-
-        /* Toggle button */
-        .sidebar-toggle {
-            position: fixed;
-            top: 10px;
-            left: 10px;
-            z-index: 40;
-            background-color: #2d2d2d;
-            border: 1px solid #606060;
-            align-items: center;
-            text-align: center;
-            justify-content: center;
-            border-radius: 10px;
-            display: none;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: all 0.2s ease;
-            width: 40px;
-            height: 40px;
-        }
-        
-        .sidebar-toggle, .sidebar-toggle i {
-            background-color: #2d2d2d;
-        }
-
-        .sidebar-toggle, .sidebar-toggle i {
-            opacity: 70%;
-        }
-
-        .sidebar-toggle:hover, .sidebar-toggle:hover i {
-            background-color: #3d3d3d;
-        }
-        
-        @media (max-width: 1023px) {
-            .sidebar-toggle {
-                display: flex;
-            }
-        }
-
-        /* Fix for iframe on mobile */
-        #pdf-viewer {
-            width: 1px;
-            min-width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        /* Close button for sidebar */
-        .close-sidebar {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            display: none;
-        }
-        
-        @media (max-width: 1023px) {
-            .close-sidebar {
-                display: block;
-            }
-        }
-    </style>
+    
+    <!-- Styles / Scripts  -->
+    <!-- <script src="https://cdn.tailwindcss.com/3.4.16"></script> -->
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> -->
+    <script src="./js/tailwind-3-4-16.js"></script>
+    <link rel="stylesheet" href="./css/font-awesome-all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
     <div class="min-h-screen flex flex-col">
@@ -274,7 +126,7 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="./js/script.js"></script>
     
     <!-- Add this script for sidebar toggle functionality -->
     <script>
