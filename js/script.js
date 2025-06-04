@@ -390,6 +390,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Event listeners
+  searchInput.addEventListener("input", () => {
+    searchAirport()
+  })
+  
   searchBtn.addEventListener("click", searchAirport)
   searchInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") searchAirport()
