@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
         titulo.includes("PLANO DE AER")
       ) {
         chartType = "TAXI"
-      } else if (titulo.includes("SID") || titulo.includes("SALIDA") || titulo.includes("DEPARTURE")) {
+      } else if (titulo.includes("SID ") || titulo.includes("SALIDA") || titulo.includes("DEPARTURE")) {
         chartType = "SID"
       }
 
