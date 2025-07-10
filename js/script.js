@@ -155,6 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (
         titulo.includes("APP") ||
         titulo.includes("APROXIMACIÓN") ||
+        titulo.includes("APROXIMACION") ||
         titulo.includes("APPROACH") ||
         titulo.includes("ILS") ||
         titulo.includes("VOR") ||
