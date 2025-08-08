@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchAirportData(useProxy = false) {
 
     try {
-      const url = "https://ais.anac.gov.ar/aip/ad"
+      const url = "https://ais.anac.gob.ar/aip/ad"
 
       // Try direct fetch with the exact headers provided
       const response = await fetch("database.html", {
@@ -119,9 +119,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (url.startsWith("http")) {
         fullUrl = url
       } else if (url.startsWith("/")) {
-        fullUrl = `https://ais.anac.gov.ar${url}`
+        fullUrl = `https://ais.anac.gob.ar${url}`
       } else {
-        fullUrl = `https://ais.anac.gov.ar/${url}`
+        fullUrl = `https://ais.anac.gob.ar/${url}`
       }
       // console.log("Chart URL:", fullUrl)
 
@@ -302,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Format URL if needed
     let pdfUrl = url
     if (!pdfUrl.startsWith("http")) {
-      pdfUrl = `https://ais.anac.gov.ar${pdfUrl}`
+      pdfUrl = `https://ais.anac.gob.ar${pdfUrl}`
     }
 
     displayGoogleViewer(pdfUrl)
